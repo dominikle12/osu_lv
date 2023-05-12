@@ -14,8 +14,6 @@ from sklearn.pipeline import Pipeline
 from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import GridSearchCV
 
-from sklearn . model_selection import cross_val_score
-
 def plot_decision_regions(X, y, classifier, resolution=0.02):
     plt.figure()
     # setup marker generator and color map
@@ -84,61 +82,54 @@ plt.title("Tocnost: " + "{:0.3f}".format((accuracy_score(y_train, y_train_p))))
 plt.tight_layout()
 plt.show()
 
-
-KNN_model = KNeighborsClassifier(n_neighbors = 7)
+# Model KNN regresije
+KNN_model = KNeighborsClassifier(n_neighbors=5)
 KNN_model.fit(X_train_n, y_train)
-y_test_p_KNN = KNN_model.predict(X_test_n)
-y_train_p_KNN = KNN_model.predict(X_train_n)
 
-print("TOCNOST TRAIN KNN: " + "{:0.3f}".format((accuracy_score(y_train, y_train_p_KNN))))
+# Evaluacija modela KNN regresije
+y_train_p = KNN_model.predict(X_train_n)
+y_test_p = KNN_model.predict(X_test_n)
 
-print("TOCNOST TEST KNN: " + "{:0.3f}".format((accuracy_score(y_test, y_test_p_KNN))))
+print("KNN regresija: ")
+print("Tocnost train: " + "{:0.3f}".format((accuracy_score(y_train, y_train_p))))
+print("Tocnost test: " + "{:0.3f}".format((accuracy_score(y_test, y_test_p))))
 
-
-#KNN GRANICA ODLUKE
-plot_decision_regions(X_train_n, y_train, classifier=KNN_model)
+# granica odluke pomocu KNN regresije
+plot_decision_regions(X_train_n, y_train, classifier=KNN_model)                              #NJENA FUNKCIJA ZA ODREĐIVANJE GRANICE ODLUKE 
 plt.xlabel('x_1')
 plt.ylabel('x_2')
 plt.legend(loc='upper left')
-plt.title("Tocnost: " + "{:0.3f}".format((accuracy_score(y_train, y_train_p_KNN))))
+plt.title("Tocnost: " + "{:0.3f}".format((accuracy_score(y_train, y_train_p))))
 plt.tight_layout()
 plt.show()
 
 
-KNN_model2 = KNeighborsClassifier()
+# Kad je K=1
+KNN_model = KNeighborsClassifier(n_neighbors=1)
+KNN_model.fit(X_train_n, y_train)
 
-param_grid = dict(n_neighbors = list(range(1, 31)))
-svm_gscv = GridSearchCV(KNN_model2 , param_grid , cv =5 , scoring ='accuracy',
-n_jobs = -1 )
-svm_gscv.fit (X_train_n , y_train )
-print ( svm_gscv . best_params_ )
-print ( svm_gscv . best_score_ )
-print ( svm_gscv . cv_results_ )
+y_train_p = KNN_model.predict(X_train_n)
+y_test_p = KNN_model.predict(X_test_n)
 
-SVM_model = svm.SVC(kernel = 'rbf', gamma = 1 , C = 10)
-SVM_model.fit(X_train_n, y_train )
-y_test_p_SVM = SVM_model . predict ( X_test_n )
-y_train_p_SVM = SVM_model . predict ( X_train_n )
-
-print("TOCNOST TRAIN SVM: " + "{:0.3f}".format((accuracy_score(y_train, y_train_p_SVM))))
-
-print("TOCNOST TEST SVM: " + "{:0.3f}".format((accuracy_score(y_test, y_test_p_SVM))))
-
-plot_decision_regions(X_train_n, y_train, classifier=SVM_model)
+plot_decision_regions(X_train_n, y_train, classifier=KNN_model)                              #NJENA FUNKCIJA ZA ODREĐIVANJE GRANICE ODLUKE 
 plt.xlabel('x_1')
 plt.ylabel('x_2')
 plt.legend(loc='upper left')
-plt.title("Tocnost: " + "{:0.3f}".format((accuracy_score(y_train, y_train_p_SVM))))
+plt.title("Tocnost: " + "{:0.3f}".format((accuracy_score(y_train, y_train_p))))
 plt.tight_layout()
 plt.show()
 
-SVM_model2 = svm.SVC()
+# Kad je K=100
+KNN_model = KNeighborsClassifier(n_neighbors=100)
+KNN_model.fit(X_train_n, y_train)
 
-param_grid = {'C': [10 , 100 , 100 ],
-'gamma': [10 , 1 , 0.1 , 0.01]}
-svm_gscv = GridSearchCV (SVM_model2, param_grid , cv =5 , scoring = 'accuracy',
-n_jobs = -1 )
-svm_gscv.fit ( X_train_n , y_train )
-print ( svm_gscv . best_params_ )
-print ( svm_gscv . best_score_ )
-print ( svm_gscv . cv_results_ )
+y_train_p = KNN_model.predict(X_train_n)
+y_test_p = KNN_model.predict(X_test_n)
+
+plot_decision_regions(X_train_n, y_train, classifier=KNN_model)                              #NJENA FUNKCIJA ZA ODREĐIVANJE GRANICE ODLUKE 
+plt.xlabel('x_1')
+plt.ylabel('x_2')
+plt.legend(loc='upper left')
+plt.title("Tocnost: " + "{:0.3f}".format((accuracy_score(y_train, y_train_p))))
+plt.tight_layout()
+plt.show()
